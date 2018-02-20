@@ -1,11 +1,14 @@
 import serial
-import socket
+from socket import socket, AF_INET, SOCK_DGRAM
 
 def send(msg, target):
     ip = target['udp_ip']
     port = target['udp_port']
-    socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(msg, (ip, port))
-
+    try:
+        socket(AF_INET, SOCK_DGRAM).sendto(msg, (ip, port))
+    except IOError as e:
+        print ('{}: {}'.format(target['name'], e))
+    
 # AIS receiver at the serial port
 serial_port = '/dev/serial0'
 baud_rate = 38400
