@@ -1,4 +1,6 @@
 import serial
+import json
+import os
 from socket import socket, AF_INET, SOCK_DGRAM
 
 def send(msg, target):
@@ -22,6 +24,10 @@ targets = [
     {'name': 'pocketmariner', 'udp_ip': '54.225.113.225', 'udp_port': 5322},
     {'name': 'shipfinder', 'udp_ip': '109.200.19.151', 'udp_port': 4001}
 ]
+# Replace targets by data from external config file if available
+if os.path.isfile('ais-forwarder.json'):
+    with open('ais-forwarder.json', 'r') as f:
+        targets = json.load(f)['targets']
 print ("Reading from serial port: " + serial_port)
 for target in targets:
     print ("Sending to " + target['name'])
